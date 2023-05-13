@@ -4,6 +4,7 @@
     {
         public static string EnvLoadException = "Exception while loading env.";
         public static string TokenDoesNotExistInEnv = "Token does not exist in env.";
+        public static string OpenApiKeyDoesNotExistInEnv = "Open api key does not exist in env.";
 
         public static void SendSpecialMessage(ConsoleColor color, string message)
         {
