@@ -13,19 +13,34 @@ namespace CsharpTelegramBot
             });
 
 
-            string? _token = await Task.Run(() =>
+            string? botToken = await Task.Run(() =>
             {
                 return EnvLoader.GetBotToken();
             });
 
-            if (_token == ExceptionMessages.TokenDoesNotExistInEnv)
+            if (botToken == ExceptionMessages.TokenDoesNotExistInEnv)
             {
                 ExceptionMessages.SendSpecialMessage(ConsoleColor.Red, ExceptionMessages.TokenDoesNotExistInEnv);
                 throw new Exception();
             }
 
-            TelegramBot bot = new TelegramBot(_token);
-            bot.Init();
+            string? openApiKey = await Task.Run(() =>
+            {
+                return EnvLoader.GetOpenApiKey();
+            });
+
+            if (openApiKey == ExceptionMessages.OpenApiKeyDoesNotExistInEnv)
+            {
+                ExceptionMessages.SendSpecialMessage(ConsoleColor.Red, ExceptionMessages.OpenApiKeyDoesNotExistInEnv);
+                throw new Exception();
+            }
+
+            TelegramBot bot = new TelegramBot(botToken, openApiKey);
+
+            await Task.Run(() =>
+            {
+                bot.Init();
+            });
 
             await Task.Run(() =>
             {

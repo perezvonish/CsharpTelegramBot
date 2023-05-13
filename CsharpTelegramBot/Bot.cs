@@ -9,15 +9,18 @@ namespace CsharpTelegramBot
     public class TelegramBot
     {
         private string _token { get; } = String.Empty;
+        private string _openApiKey { get; } = String.Empty;
+        
         public TelegramBotClient TelegramBotClient { get; set; }
         public ReceiverOptions receiverOptions = new ReceiverOptions(){
             AllowedUpdates = Array.Empty<UpdateType>()
         };
         public CancellationTokenSource cts = new CancellationTokenSource();
 
-        public TelegramBot(string token)
+        public TelegramBot(string botToken, string openApiKey)
         {
-            _token = token;
+            this._token = botToken;
+            this._openApiKey = openApiKey;
         }
 
         public Telegram.Bot.TelegramBotClient Init()
@@ -87,11 +90,21 @@ namespace CsharpTelegramBot
 
             Console.WriteLine($"Received a '{message.Text}' message in chat {chatId}. Type: {message.Type}");
 
-            Message sentMessage = await this.TelegramBotClient.SendTextMessageAsync(
+            await this.TelegramBotClient.SendTextMessageAsync(
                 chatId: chatId,
                 text: "You said:\n" + message.Text,
                 cancellationToken: this.cts.Token);
-            //Console.WriteLine(message.Audio.Equals);
+
+            var chat = OpenApiSender.api.Chat.CreateConversation();
+            //chat.AppendSystemMessage(""); 
+
+            chat.AppendUserInput(message.Text);
+            var answer = await chat.GetResponseFromChatbotAsync();
+
+            await this.TelegramBotClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "You said:\n" + answer,
+                cancellationToken: this.cts.Token);
         }
     }
 }
