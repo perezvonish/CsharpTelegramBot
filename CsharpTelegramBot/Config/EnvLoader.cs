@@ -25,5 +25,10 @@
         {
             return DotNetEnv.Env.GetString("TELEGRAM_BOT_TOKEN", ExceptionMessages.TokenDoesNotExistInEnv);
         }
+
+        public static string? GetOpenApiKey()
+        {
+            return DotNetEnv.Env.GetString("OPEN_API_KEY", ExceptionMessages.OpenApiKeyDoesNotExistInEnv);
+        }
     }
 }
