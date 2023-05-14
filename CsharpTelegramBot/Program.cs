@@ -51,10 +51,7 @@ namespace CsharpTelegramBot
 
             Console.WriteLine($"Start listening for @{about.Username}");
 
-            for(; ;)
-            {
-                await ConsoleHandler.CommandHandler();
-            }
+            await ConsoleHandler.CommandHandler();
         }
     }
 }
